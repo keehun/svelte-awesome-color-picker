@@ -19,6 +19,7 @@
 			hex: string | undefined;
 			color: Colord | undefined;
 		};
+		blur: {};
 	}>();
 
 	/** customize the ColorPicker component parts. Can be used to display a Chrome variant or an Accessibility Notice */
@@ -128,10 +129,14 @@
 
 	function mousedown({ target }: MouseEvent) {
 		if (isDialog) {
+			const _isOpen = isOpen;
 			if (labelElement.contains(target as Node) || labelElement.isSameNode(target as Node)) {
 				isOpen = !isOpen;
 			} else if (isOpen && !wrapper.contains(target as Node) && !disableCloseClickOutside) {
 				isOpen = false;
+			}
+			if (!isOpen && _isOpen != isOpen && !disableCloseClickOutside) {
+				dispatch('blur', {});
 			}
 		}
 	}
