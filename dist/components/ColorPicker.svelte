@@ -90,13 +90,14 @@ function getTexts() {
 }
 function mousedown({ target }) {
     if (isDialog) {
+        const _isOpen = isOpen;
         if (labelElement.contains(target) || labelElement.isSameNode(target)) {
             isOpen = !isOpen;
         }
         else if (isOpen && !wrapper.contains(target) && !disableCloseClickOutside) {
             isOpen = false;
         }
-        if (!isOpen && !disableCloseClickOutside) {
+        if (!isOpen && _isOpen != isOpen && !disableCloseClickOutside) {
             dispatch('blur', {});
         }
     }
@@ -125,7 +126,6 @@ function keyup({ key, target }) {
  */
 function updateColor() {
     if (isUndefined && !_isUndefined) {
-        console.log('KEEHUNLOG is undefined but was not before');
         _isUndefined = true;
         hsv = rgb = hex = undefined;
         dispatch('input', { color, hsv, rgb, hex });
@@ -257,7 +257,7 @@ function updateLetters(letters) {
 			/>
 		</div>
 		{#if isAlpha}
-			<div class="a" style:--alphaless-color={hex ? hex : _hex}>
+			<div class="a" style:--alphaless-color={hex ? hex.substring(0, 7) : _hex}>
 				<Slider
 					min={0}
 					max={1}
