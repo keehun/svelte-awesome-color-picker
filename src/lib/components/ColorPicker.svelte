@@ -87,9 +87,9 @@
 	 */
 	let _rgb: RgbaColor = { r: 255, g: 0, b: 0, a: 1 };
 	let _hsv: HsvaColor = { h: 0, s: 100, v: 100, a: 1 };
-	let _hex: string = '#ff0000';
+	let _hex: string | undefined = nullable ? undefined : '#ff0000';
 
-	let isUndefined = false;
+	let isUndefined = nullable;
 	let _isUndefined = isUndefined;
 
 	let spanElement: HTMLSpanElement;
@@ -295,7 +295,7 @@
 			/>
 		</div>
 		{#if isAlpha}
-			<div class="a" style:--alphaless-color={(hex ? hex : _hex).substring(0, 7)}>
+			<div class="a" style:--alphaless-color={hex ? hex.substring(0, 7) : _hex}>
 				<Slider
 					min={0}
 					max={1}
@@ -311,7 +311,7 @@
 		{#if isTextInput}
 			<svelte:component
 				this={getComponents().textInput}
-				hex={hex ?? _hex}
+				hex={hex ?? _hex ?? ''}
 				rgb={rgb ?? _rgb}
 				hsv={hsv ?? _hsv}
 				on:input={({ detail }) => {

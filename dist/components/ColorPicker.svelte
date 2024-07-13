@@ -55,8 +55,8 @@ export let a11yTexts = undefined;
  */
 let _rgb = { r: 255, g: 0, b: 0, a: 1 };
 let _hsv = { h: 0, s: 100, v: 100, a: 1 };
-let _hex = '#ff0000';
-let isUndefined = false;
+let _hex = nullable ? undefined : '#ff0000';
+let isUndefined = nullable;
 let _isUndefined = isUndefined;
 let spanElement;
 let labelElement;
@@ -125,6 +125,7 @@ function keyup({ key, target }) {
  */
 function updateColor() {
     if (isUndefined && !_isUndefined) {
+        console.log('KEEHUNLOG is undefined but was not before');
         _isUndefined = true;
         hsv = rgb = hex = undefined;
         dispatch('input', { color, hsv, rgb, hex });
@@ -256,7 +257,7 @@ function updateLetters(letters) {
 			/>
 		</div>
 		{#if isAlpha}
-			<div class="a" style:--alphaless-color={(hex ? hex : _hex).substring(0, 7)}>
+			<div class="a" style:--alphaless-color={hex ? hex : _hex}>
 				<Slider
 					min={0}
 					max={1}
@@ -272,7 +273,7 @@ function updateLetters(letters) {
 		{#if isTextInput}
 			<svelte:component
 				this={getComponents().textInput}
-				hex={hex ?? _hex}
+				hex={hex ?? _hex ?? ''}
 				rgb={rgb ?? _rgb}
 				hsv={hsv ?? _hsv}
 				on:input={({ detail }) => {
